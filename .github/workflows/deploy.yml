@@ -25,7 +25,11 @@ jobs:
           sed -i 's#https://script.google.com/macros/s/AKfycbxOE2bAsnGKn1TvOlxBK1qJpe2nblhC4l8YWmAxTUe3VM383YaNrPmH3i1U2g-Sp7LJxA/exec#https://script.google.com/macros/s/AKfycbzM-uwPH8Dgc3bajBXXkMz2mi7LwUL7KjLA5PeIhqFYJaPc-jEMFa2UxEFLErrdtpgv/exec#g' src/utils/api.js
           sed -i 's#https://abrenov35.github.io/planning-ab#https://abrenov35.github.io/teracity-gantt#g' package.json
           sed -i 's#"name": "planning-ab"#"name": "teracity-gantt"#g' package.json package-lock.json
+          sed -i 's#AB Planning - Gantt#TERACITY GANTT#g' public/index.html
           grep -rl --exclude-dir=.git 'AB PLANNING' src public 2>/dev/null | xargs -r sed -i 's/AB PLANNING/TERACITY GANTT/g'
+
+          # Add explicit share metadata for phones and messaging apps.
+          sed -i 's#<title>TERACITY GANTT</title>#<title>TERACITY GANTT</title><meta property="og:title" content="TERACITY GANTT"/><meta property="og:site_name" content="TERACITY GANTT"/><meta name="twitter:title" content="TERACITY GANTT"/><meta name="apple-mobile-web-app-title" content="TERACITY GANTT"/>#g' public/index.html
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
