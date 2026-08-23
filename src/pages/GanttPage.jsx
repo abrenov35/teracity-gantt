@@ -1,0 +1,6 @@
+import React,{useContext,useState} from "react";
+import {AppContext} from "../context/AppContext";
+import {GanttChart} from "../components/GanttChart";
+import {Modal} from "../components/Modal";
+import {FormAffectation} from "../components/FormAffectation";
+export const GanttPage=({onGanttControlsReady})=>{const{ouvriers,chantiers,affectations,addAffectation,loading}=useContext(AppContext);const[open,setOpen]=useState(false),[worker,setWorker]=useState(null),[date,setDate]=useState(null);if(loading)return <div style={{padding:16}}>Chargement...</div>;return <div style={{display:"flex",flexDirection:"column",height:"100%"}}><GanttChart ouvriers={ouvriers} chantiers={chantiers} affectations={affectations} onControlsReady={onGanttControlsReady} onAddAffectation={(id,d)=>{setWorker(ouvriers.find(o=>Number(o.id)===Number(id)));setDate(d);setOpen(true)}} onAffectationClick={()=>{}}/><Modal isOpen={open} title="Ajouter une affectation" onClose={()=>setOpen(false)}>{worker&&<FormAffectation ouvrier={worker} chantiers={chantiers} selectedDate={date} onCancel={()=>setOpen(false)} onSubmit={async f=>{const r=await addAffectation(worker.id,f.chantierId,f.dateDebut,f.dateFin,f.tache);if(r.success)setOpen(false);else alert(r.error||"Erreur")}}/>}</Modal></div>};
