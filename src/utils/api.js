@@ -1,7 +1,6 @@
 // TERACITY GANTT — backend volontairement isolé d'AB PLANNING.
 // Google Sheet cible : 1iCqgYA-rrn6RE64ktgRSS5Prl_7etucakeP0ILesHts
-// Remplacer TERACITY_API_URL après création/déploiement de l'Apps Script TERACITY.
-const TERACITY_API_URL = "";
+const TERACITY_API_URL = "https://script.google.com/macros/s/AKfycbzM-uwPH8Dgc3bajBXXkMz2mi7LwUL7KjLA5PeIhqFYJaPc-jEMFa2UxEFLErrdtpgv/exec";
 
 const unavailable = () => Promise.resolve({ error: "Backend TERACITY non configuré" });
 
