@@ -1,4 +1,4 @@
-name: Build & Deploy to GitHub Pages
+name: Build & Deploy TERACITY from AB Planning
 
 on:
   push:
@@ -13,22 +13,41 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout TERACITY repository
         uses: actions/checkout@v4
+
+      - name: Clone exact current AB Planning
+        run: git clone --depth 1 https://github.com/abrenov35/planning-ab.git app
+
+      - name: Apply TERACITY identity and backend only
+        working-directory: app
+        run: |
+          sed -i 's#https://script.google.com/macros/s/AKfycbxOE2bAsnGKn1TvOlxBK1qJpe2nblhC4l8YWmAxTUe3VM383YaNrPmH3i1U2g-Sp7LJxA/exec#https://script.google.com/macros/s/AKfycbzM-uwPH8Dgc3bajBXXkMz2mi7LwUL7KjLA5PeIhqFYJaPc-jEMFa2UxEFLErrdtpgv/exec#g' src/utils/api.js
+          sed -i 's#https://abrenov35.github.io/planning-ab#https://abrenov35.github.io/teracity-gantt#g' package.json
+          sed -i 's#"name": "planning-ab"#"name": "teracity-gantt"#g' package.json package-lock.json
+          grep -rl --exclude-dir=.git 'AB PLANNING' src public 2>/dev/null | xargs -r sed -i 's/AB PLANNING/TERACITY GANTT/g'
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
       - name: Install dependencies
-        run: npm install
-      - name: Build
+        working-directory: app
+        run: npm ci
+
+      - name: Build exact AB Planning front for TERACITY
+        working-directory: app
         env:
           CI: false
         run: npm run build
+
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
+          publish_dir: ./app/build
           publish_branch: gh-pages
           force_orphan: true
